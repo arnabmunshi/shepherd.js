@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="node_modules/shepherd.js/dist/css/shepherd-theme-arrows.css" />
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <header>
+        <a href="#">MyLogo</a>
+        <nav>
+            <ul>
+                <li class="first"><a href="#">About us</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Features</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside>
+        <h3>My title here</h3>
+        <ul>
+            <li><a href="#">Control Panel</a></li>
+            <li><a href="#">Control Panel</a></li>
+            <li><a href="#">Control Panel</a></li>
+            <li><a href="#">Control Panel</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <section>
+            <h1>Some important content here</h1>
+            <button type="button" name="button" class="restart_toor"> Restart Tour </button>
+        </section>
+    </main>
+
+    <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="node_modules/shepherd.js/dist/js/shepherd.min.js"></script>
+
+    <script>
+
+        const tour = new Shepherd.Tour({
+            defaults: {
+                classes: 'shepherd-theme-arrows',
+                // showCancelLink : true
+            }
+        });
+
+        tour.addStep('example-step', {
+            text: 'This is where you will learn about us.',
+            attachTo: '.first bottom',
+            buttons: [
+                {
+                    text: 'EXIT',
+                    action: tour.cancel,
+                    classes: "exit"
+                },
+                {
+                    text: 'Next',
+                    action: tour.next
+                }
+            ],
+
+        });
+
+        tour.addStep('example-step2', {
+            text: 'This is a side navigation, duh!',
+            attachTo: 'h3 right',
+            buttons: [
+                {
+                    text: 'Back',
+                    action: tour.back
+                },
+                {
+                    text: 'Next',
+                    action: tour.next
+                }
+            ]
+        });
+
+        tour.addStep('example-step3', {
+        text: 'This is the end of your tour bro',
+        attachTo: 'h1 bottom',
+        buttons: [
+          {
+            text: 'Back',
+            action: tour.back
+          },
+          {
+            text: 'Get this outta here',
+            action: tour.next,
+            classes : 'last-step'
+          }
+        ]
+        });
+
+
+
+        $('body').on('click', '.last-step, .exit', function(){
+          // alert();
+          document.cookie = "toor_status = true";
+        });
+
+        // Get Cookie
+        function getCookie(toor_status) {
+          var name = toor_status + "=";
+          var decodedCookie = decodeURIComponent(document.cookie);
+          var ca = decodedCookie.split(';');
+          for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
+        }
+
+        // Check Cookie
+        function checkCookie() {
+          var toor_status = getCookie("toor_status");
+          // console.log(toor_status);
+          // return false;
+          if (toor_status == "true") {
+            // alert('toor status is true')
+            tour.complete()
+          } else {
+            // alert('toor status is empty')
+            tour.start()
+          }
+        }
+
+        checkCookie();
+
+        $('.restart_toor').click(function(){
+          tour.start()
+        });
+
+    </script>
+
+    <style media="screen">
+      .restart_toor{
+        background: red;
+        color:#fff;
+        padding: 10px;
+        border-radius: 11px;
+        border: none;
+        margin-top: 15px;
+      }
+    </style>
+
+</body>
+</html>
